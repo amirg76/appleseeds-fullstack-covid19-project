@@ -1,3 +1,77 @@
-h1 {
-  color: blue;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body,
+html {
+  height: 100vh;
+}
+main {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.statistics {
+  width: 95vw;
+  display: flex;
+  justify-content: space-between;
+  /* align-items: center; */
+}
+.statisticsButtons {
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.statisticsButtons > button {
+  width: 10vw;
+  margin: 1vw;
+  border-radius: 0.3vw;
+  background-color: darkslateblue;
+  color: #fff;
+  font-size: 1.5vw;
+  cursor: pointer;
+}
+.statisticsButtons > button:hover {
+  background-color: rgb(44, 36, 92);
+}
+.mainBody {
+  display: flex;
+  justify-content: space-between;
+  align-content: space-between;
+  width: 90vw;
+}
+.continent {
+  width: 10vw;
+  height: 5vh;
+  display: flex;
+  justify-content: flex-start;
+  /* align-items: center; */
+}
+.continentButtons {
+  width: 5vw;
+  display: flex;
+  justify-content: space-between;
+}
+.continentButtons > button {
+  display: flex;
+  width: 6vw;
+  margin-left: 1vw;
+  height: 3vh;
+  border-radius: 0.3vw;
+  background-color: orange;
+  color: #fff;
+  font-size: 1vw;
+  cursor: pointer;
+}
+.chartContainer {
+  position: relative;
+  /* height: 30vh; */
+  width: 70vw;
+}
+#myChart {
+  /* height: 50vh; */
 }

@@ -6,9 +6,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="./styles/normalize.css" />
     <link rel="stylesheet" href="./styles/style.desktop.css" />
-    <title>Document</title>
+    <title>Covid-19 Project</title>
   </head>
   <body>
-    <h1>hello</h1>
+    <main>
+      <h1>Covid 19 Stats</h1>
+      <div class="statistics">
+        <div class="statisticsButtons">
+          <button class="confirmed">Confirmed</button>
+          <button class="deaths">Deaths</button>
+          <button class="recovered">Recovered</button>
+          <button class="critical">Critical</button>
+        </div>
+      </div>
+      <div class="mainBody">
+        <div class="continent">
+          <div class="continentButtons">
+            <button class="asia">Asia</button>
+            <button class="europe">Europe</button>
+            <button class="africa">Africa</button>
+            <button class="americas">Americas</button>
+            <button class="world">World</button>
+          </div>
+        </div>
+        <div class="chartContainer">
+          <canvas id="myChart"></canvas>
+        </div>
+      </div>
+    </main>
+
+    <!-- <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"
+      integrity="sha512-QSkVNOCYLtj73J4hbmVoOV6KVZuMluZlioC+trLpewV8qMjsWqlIQvkn1KGX2StWvPMdWGBqim1xlC8krl1EKQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="./app.js"></script>
   </body>
 </html>
