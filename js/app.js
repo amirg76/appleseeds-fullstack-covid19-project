@@ -1,8 +1,14 @@
 import { capitalFirstLetter, dropDowncontinent } from "./tools.js";
-import { buildCountryList } from "./continent.js";
+import {
+  buildCountryList,
+  createRegionArrData,
+  continentClick,
+  changeTocountryDisply,
+} from "./continent.js";
+import { statisticsClick } from "./statistics.js";
 
-let SortContinentArr = [];
-let SortStatisticArr = [];
+let sortContinentArr = [];
+let sortStatisticArr = [];
 const ctx = document.getElementById("myChart").getContext("2d");
 
 const fetchDeath = () => {
@@ -67,64 +73,81 @@ function updateChartStatisticsBycontinent() {
 
 //  GET COUNTRIES NAME
 export function getCountriesName() {
-  const newSortArr = SortContinentArr.map((element) => element.name);
+  const newSortArr = sortContinentArr.map((element) => element.name);
   return newSortArr;
 }
 
 //  GET STATISTIC BY CONTINET
 function getStatisticsBycontinent() {
-  return SortStatisticArr;
+  return sortStatisticArr;
+}
+
+// CALC TOTAL CASES
+function calcTotalCases(deaths, recovered) {
+  const totalCases = document.querySelector(".totalCases");
+  const sumTotal = Number(deaths) + Number(recovered);
+  console.log(sumTotal);
+  totalCases.innerText = sumTotal;
+}
+
+// RENDER COUNTRY STATICS
+function renderCountryStat() {
+  const newCases = document.querySelector(".newCases");
+  const totalDeaths = document.querySelector(".totalDeaths");
+  const newDeaths = document.querySelector(".newDeaths");
+  const totalRecovered = document.querySelector(".totalRecovered");
+  const criticalCon = document.querySelector(".criticalCon");
+  newCases.innerText = sortContinentArr[0].statistic.newConfirmed;
+  totalDeaths.innerText = sortContinentArr[0].statistic.deaths;
+  newDeaths.innerText = sortContinentArr[0].statistic.newDeaths;
+  totalRecovered.innerText = sortContinentArr[0].statistic.recovered;
+  calcTotalCases(totalDeaths.innerText, totalRecovered.innerText);
+}
+
+// SORT BY COUNTRY
+function sortByCountry(sortValue) {
+  let old_data = JSON.parse(localStorage.getItem("data"));
+  sortContinentArr = old_data.filter((element) => element.name === sortValue);
 }
 
 // SORT BY CONTINET
 export function sortBycontinent(sortValue) {
   let old_data = JSON.parse(localStorage.getItem("data"));
-  SortContinentArr = old_data.filter((element) => element.region === sortValue);
+  sortContinentArr = old_data.filter((element) => element.region === sortValue);
 
   updateChartCountriesName();
 }
 
 // SORT BY STATISTIC
-function sortByStatistic(sortValue = "confirmed") {
+export function sortByStatistic(sortValue = "confirmed") {
   let old_data = JSON.parse(localStorage.getItem("data"));
-  SortStatisticArr = SortContinentArr.map((element) => {
+  sortStatisticArr = sortContinentArr.map((element) => {
     const { deaths, confirmed, recovered, critical } = element.statistic;
     const searchObj = { deaths, confirmed, recovered, critical };
     const searchObjKeys = Object.keys(searchObj);
     for (let key of searchObjKeys) if (key === sortValue) return searchObj[key];
   });
-  console.log(SortStatisticArr);
+  console.log(sortStatisticArr);
 
   updateChartStatisticsBycontinent();
 }
 
-// BEHAVE FOR STATISTICS CLICK
-function statisticsClick(e) {
-  capitalFirstLetter(e.target.className);
-  sortByStatistic(e.target.className);
-}
-// BEHAVE FOR CONTINENT CLICK
-function continentClick(e) {
-  const regionSelect = e.target.getAttribute("data-region");
-  console.log(regionSelect);
-  sortBycontinent(capitalFirstLetter(regionSelect));
+// BEHAVE FOR COUNTRY CHOISE
+export function countryChoise(countrySelect) {
+  const countryHeader = document.querySelector(".countryHeader");
+  countryHeader.innerText = countrySelect;
+  changeTocountryDisply();
+  sortByCountry(countrySelect);
+  console.log(sortContinentArr);
+  renderCountryStat();
 }
 
 // START LISTENER TO BUTTONS
 function startListenerToButtons() {
-  const continentButtons = document.querySelector(".continentButtons");
+  const continentButtons = document.querySelector(".dropdown");
   continentButtons.addEventListener("click", continentClick);
   const statisticsButtons = document.querySelector(".statisticsButtons");
   statisticsButtons.addEventListener("click", statisticsClick);
-}
-
-// CREATE REGION ARRAY DATA
-function createRegionArrData(countryData) {
-  const getRegion = countryData.map((element) => {
-    const { cca2, region } = element;
-    return { cca2, region };
-  });
-  return getRegion;
 }
 
 // CREATE COVID ARRAY DATA
@@ -132,7 +155,16 @@ function createCovidArrData(covidData) {
   const getCovidData = covidData.map((element) => {
     const { code, name } = element;
     const { deaths, confirmed, recovered, critical } = element.latest_data;
-    const statistic = { deaths, confirmed, recovered, critical };
+
+    const { deaths: newDeaths, confirmed: newConfirmed } = element.today;
+    const statistic = {
+      deaths,
+      confirmed,
+      recovered,
+      critical,
+      newDeaths,
+      newConfirmed,
+    };
     let merged = { code, name, statistic };
     // let merged = { code, name, deaths, confirmed, recovered, critical };
     return merged;
@@ -141,16 +173,16 @@ function createCovidArrData(covidData) {
 }
 
 // CONACT ARRAY OF DATA
-function connectArrOfData(covidArrData, RegionArrData) {
+function connectArrOfData(covidArrData, regionArrData) {
   let connectData = [];
 
   for (let i = 0; i < covidArrData.length; i++) {
-    for (let j = 0; j < RegionArrData.length; j++) {
+    for (let j = 0; j < regionArrData.length; j++) {
       const { code, name, statistic } = covidArrData[i];
       // const { code, name, deaths, confirmed, recovered, critical } =
       //   covidArrData[i];
-      const { region } = RegionArrData[j];
-      if (code === RegionArrData[j].cca2) {
+      const { region } = regionArrData[j];
+      if (code === regionArrData[j].cca2) {
         const connectObj = {
           code,
           name,
@@ -177,15 +209,16 @@ function connectArrOfData(covidArrData, RegionArrData) {
 // CREATE ARRAY OF DATA
 function createArrOfData(covidData, countryData, old_data) {
   const covidArrData = createCovidArrData(covidData);
-  const RegionArrData = createRegionArrData(countryData);
+  const regionArrData = createRegionArrData(countryData);
 
-  return connectArrOfData(covidArrData, RegionArrData);
+  return connectArrOfData(covidArrData, regionArrData);
 }
 
 // SAVE DATA RESULT ON LOCAL STORGE
 function saveStorage(covidData, countryData) {
   let old_data = JSON.parse(localStorage.getItem("data"));
   old_data = createArrOfData(covidData, countryData, old_data);
+  console.log(old_data);
   localStorage.setItem("data", JSON.stringify(old_data));
 }
 // FETCH DATA
@@ -215,6 +248,7 @@ const StartPage = async () => {
   // updateChartCountriesName();
   startListenerToButtons();
   dropDowncontinent();
+
   // }
   // else {
   //   startListenerToButtons();
