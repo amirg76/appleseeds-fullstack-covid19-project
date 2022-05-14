@@ -22,11 +22,55 @@
       <div class="mainBody">
         <div class="continent">
           <div class="continentButtons">
-            <button class="asia">Asia</button>
+            <div class="dropdown">
+              <button data-region="asia" class="dropbtn">Asia</button>
+              <div data-region="asia" class="asia dropdown-content myDropdown">
+                <a href="#home">Home</a>
+                <a href="#about">About</a>
+                <a href="#contact">Contact</a>
+              </div>
+              <button data-region="europe" class="dropbtn">Europe</button>
+              <div
+                data-region="europe"
+                class="europe dropdown-content myDropdown"
+              >
+                <a href="#home">Home</a>
+                <a href="#about">About</a>
+                <a href="#contact">Contact</a>
+              </div>
+              <button data-region="africa" class="dropbtn">Africa</button>
+              <div
+                data-region="africa"
+                class="africa dropdown-content myDropdown"
+              >
+                <a href="#home">Home</a>
+                <a href="#about">About</a>
+                <a href="#contact">Contact</a>
+              </div>
+              <button data-region="americas" class="dropbtn">Americas</button>
+              <div
+                data-region="americas"
+                class="americas dropdown-content myDropdown"
+              >
+                <a href="#home">Home</a>
+                <a href="#about">About</a>
+                <a href="#contact">Contact</a>
+              </div>
+              <button data-region="oceania" class="dropbtn">Oceania</button>
+              <div
+                data-region="oceania"
+                class="oceania dropdown-content myDropdown"
+              >
+                <a href="#home">Home</a>
+                <a href="#about">About</a>
+                <a href="#contact">Contact</a>
+              </div>
+            </div>
+            <!-- <button class="asia">Asia</button>
             <button class="europe">Europe</button>
             <button class="africa">Africa</button>
             <button class="americas">Americas</button>
-            <button class="world">World</button>
+            <button class="oceania">Oceania</button> -->
           </div>
         </div>
         <div class="chartContainer">
@@ -35,13 +79,9 @@
       </div>
     </main>
 
-    <!-- <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"
-      integrity="sha512-QSkVNOCYLtj73J4hbmVoOV6KVZuMluZlioC+trLpewV8qMjsWqlIQvkn1KGX2StWvPMdWGBqim1xlC8krl1EKQ=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    ></script> -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="./app.js"></script>
+    <script src="./js/app.js" defer type="module"></script>
+    <script src="./js/tools.js" defer type="module"></script>
+    <script src="/js/continent.js" defer type="module"></script>
   </body>
 </html>
